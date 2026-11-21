@@ -1,0 +1,59 @@
+
+
+# K-Nearest Neighbours (K-NN) Algorithm
+
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+
+# Load dataset
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# Split dataset
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Create KNN model
+knn = KNeighborsClassifier(n_neighbors=3)
+
+# Train the model
+knn.fit(X_train, y_train)
+
+# Predict test data
+y_pred = knn.predict(X_test)
+
+# Calculate accuracy
+accuracy = accuracy_score(y_test, y_pred)
+
+print("K-NN Classification Results")
+print("Accuracy:", accuracy * 100, "%")
+
+# Predict a new sample
+sample = [[5.1, 3.5, 1.4, 0.2]]
+prediction = knn.predict(sample)
+
+print("New Sample Prediction:",
+      iris.target_names[prediction[0]])
+
+# Plot the dataset
+plt.figure(figsize=(8, 5))
+
+for i in range(3):
+    plt.scatter(
+        X[y == i, 2],
+        X[y == i, 3],
+        label=iris.target_names[i]
+    )
+
+plt.xlabel("Petal Length")
+plt.ylabel("Petal Width")
+plt.title("Iris Flower Classification using K-NN")
+plt.legend()
+plt.grid(True)
+plt.show()
+     
