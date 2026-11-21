@@ -1,0 +1,60 @@
+
+
+# Expectation-Maximization (EM) Algorithm
+
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_blobs
+from sklearn.mixture import GaussianMixture
+
+# Generate dataset
+X, y = make_blobs(
+    n_samples=300,
+    centers=3,
+    cluster_std=1.0,
+    random_state=42
+)
+
+# Create Gaussian Mixture Model
+model = GaussianMixture(
+    n_components=3,
+    random_state=42
+)
+
+# Train using EM algorithm
+model.fit(X)
+
+# Predict clusters
+labels = model.predict(X)
+
+# Display results
+print("Expectation-Maximization Algorithm")
+print("Number of Clusters:", model.n_components)
+print("Converged:", model.converged_)
+print("Number of Iterations:", model.n_iter_)
+print("Cluster Means:")
+print(model.means_)
+
+# Plot clusters
+plt.figure(figsize=(8, 5))
+
+plt.scatter(
+    X[:, 0], X[:, 1],
+    c=labels,
+    s=40
+)
+
+plt.scatter(
+    model.means_[:, 0],
+    model.means_[:, 1],
+    marker='X',
+    s=200,
+    label="Cluster Centers"
+)
+
+plt.title("EM Algorithm using Gaussian Mixture Model")
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+plt.legend()
+plt.grid(True)
+plt.show()
+     
