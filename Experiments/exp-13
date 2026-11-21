@@ -1,0 +1,66 @@
+
+
+# Experiment 13: Car Price Prediction Model using Python
+
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+
+# Create a sample dataset
+data = {
+    'Year': [2018, 2019, 2017, 2020, 2016, 2021, 2018, 2019, 2015, 2022,
+             2017, 2020, 2016, 2021, 2019, 2015, 2022, 2018, 2020, 2017],
+    'Mileage': [30000, 25000, 45000, 20000, 60000, 15000, 35000, 28000, 70000, 10000,
+                50000, 22000, 65000, 18000, 32000, 75000, 12000, 40000, 24000, 55000],
+    'Engine': [1500, 1600, 1400, 1800, 1200, 2000, 1500, 1600, 1200, 2200,
+               1400, 1800, 1300, 2000, 1600, 1200, 2200, 1500, 1800, 1400],
+    'Price': [800000, 950000, 650000, 1200000, 450000, 1500000, 850000, 1000000, 350000, 1800000,
+              700000, 1250000, 500000, 1600000, 1050000, 300000, 1900000, 750000, 1300000, 600000]
+}
+
+df = pd.DataFrame(data)
+
+# Display dataset
+print("Car Price Dataset:")
+print(df)
+
+# Select input features and target
+X = df[['Year', 'Mileage', 'Engine']]
+y = df['Price']
+
+# Split dataset into training and testing
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Train Linear Regression model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Predict prices
+y_pred = model.predict(X_test)
+
+# Evaluate model
+print("\nCar Price Prediction Results")
+print("Mean Squared Error:", mean_squared_error(y_test, y_pred))
+print("R2 Score:", r2_score(y_test, y_pred))
+
+# Predict price for a new car
+new_car = pd.DataFrame([[2022, 15000, 1800]],
+                       columns=['Year', 'Mileage', 'Engine'])
+
+predicted_price = model.predict(new_car)
+
+print("\nPredicted Price for New Car:")
+print("Rs.", round(predicted_price[0], 2))
+
+# Visualize Actual vs Predicted Prices
+plt.figure(figsize=(8, 5))
+plt.scatter(y_test, y_pred)
+plt.xlabel("Actual Car Price")
+plt.ylabel("Predicted Car Price")
+plt.title("Actual vs Predicted Car Prices")
+plt.grid(True)
+plt.show()
