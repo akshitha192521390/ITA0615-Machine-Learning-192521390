@@ -1,0 +1,141 @@
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix
+
+# Create dataset
+data = {
+    'Income': [30000, 50000, 70000, 25000, 60000, 80000,
+               45000, 90000, 35000, 65000, 40000, 75000,
+               20000, 55000, 85000],
+    'LoanAmount': [10000, 15000, 20000, 12000, 18000, 25000,
+                  14000, 30000, 11000, 22000, 16000, 24000,
+                  8000, 17000, 28000],
+    'PaymentHistory': [2, 8, 9, 3, 7, 10, 6, 10, 4, 8, 5, 9, 1, 7, 10],
+    'CreditScore': ['Low', 'Medium', 'High', 'Low', 'Medium',
+                    'High', 'Medium', 'High', 'Low', 'High',
+                    'Medium', 'High', 'Low', 'Medium', 'High']
+}
+
+df = pd.DataFrame(data)
+
+# Separate features and target
+X = df[['Income', 'LoanAmount', 'PaymentHistory']]
+y = df['CreditScore']
+
+# Split dataset
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Create model
+model = DecisionTreeClassifier(random_state=42)
+
+# Train model
+model.fit(X_train, y_train)
+
+# Predict
+y_pred = model.predict(X_test)
+
+# Calculate accuracy
+accuracy = accuracy_score(y_test, y_pred)
+
+print("Credit Score Classification")
+print("Accuracy:", accuracy * 100, "%")
+
+# Confusion matrix
+cm = confusion_matrix(y_test, y_pred,
+                      labels=['Low', 'Medium', 'High'])
+
+print("\nConfusion Matrix:")
+print(cm)
+
+# Plot confusion matrix
+plt.figure(figsize=(6, 5))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+            xticklabels=['Low', 'Medium', 'High'],
+            yticklabels=['Low', 'Medium', 'High'])
+
+plt.xlabel("Predicted Credit Score")
+plt.ylabel("Actual Credit Score")
+plt.title("Credit Score Classification")
+plt.show()
+
+# Predict new customer
+new_customer = [[60000, 15000, 8]]
+prediction = model.predict(new_customer)
+
+print("\nNew Customer Credit Score:", prediction[0])
+     
+Credit Score Classification
+Accuracy: 100.0 %
+
+Confusion Matrix:
+[[1 0 0]
+ [0 0 0]
+ [0 0 2]]
+
+New Customer Credit Score: Medium
+/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but DecisionTreeClassifier was fitted with feature names
+  warnings.warn(
+
+# Iris Flower Classification using KNN
+
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+
+# Load Iris dataset
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# Split dataset
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Create KNN model
+knn = KNeighborsClassifier(n_neighbors=3)
+
+# Train model
+knn.fit(X_train, y_train)
+
+# Predict
+y_pred = knn.predict(X_test)
+
+# Calculate accuracy
+accuracy = accuracy_score(y_test, y_pred)
+
+print("Iris Flower Classification using KNN")
+print("Accuracy:", accuracy * 100, "%")
+
+# Predict a new flower
+sample = [[5.1, 3.5, 1.4, 0.2]]
+prediction = knn.predict(sample)
+
+print("Predicted Flower:", iris.target_names[prediction[0]])
+
+# Plot Iris dataset
+plt.figure(figsize=(8, 5))
+
+for i in range(3):
+    plt.scatter(
+        X[y == i, 2],
+        X[y == i, 3],
+        label=iris.target_names[i]
+    )
+
+plt.xlabel("Petal Length")
+plt.ylabel("Petal Width")
+plt.title("Iris Flower Classification using KNN")
+plt.legend()
+plt.grid(True)
+plt.show()
